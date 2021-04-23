@@ -1,0 +1,15 @@
+*.suo
+*.cache
+*.json
+#
+CommonData/bin/
+TgRusRandomBot/bin/
+TgRusRandomBot.DAL/bin/
+
+CommonData/obj/
+TgRusRandomBot/obj/
+TgRusRandomBot.DAL/obj/
+
+CommonData/SecretKeys.cs
+
+.vs/
