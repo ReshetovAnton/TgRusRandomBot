@@ -26,7 +26,7 @@ namespace TgRusRandomBot.Services
                     chatId: userId,
                     text: text,
                     ParseMode.Html,
-                    false,
+                    true,
                     false,
                     0,
                     replyKeyboard

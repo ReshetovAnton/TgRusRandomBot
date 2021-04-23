@@ -9,5 +9,6 @@ namespace CommonData
     public class DefaultValues
     {
         public const int botTimeOut = 10;
+        public const string timeZone = "Russian Standard Time";
     }
 }

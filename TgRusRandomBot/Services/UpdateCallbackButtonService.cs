@@ -15,7 +15,7 @@ using TgRusRandomBot.TgBotModels;
 
 namespace TgRusRandomBot.Services
 {
-    public class UpdateCallbackButton
+    public class UpdateCallbackButtonService
     {
         private static readonly Random Random = new();
 
@@ -31,6 +31,8 @@ namespace TgRusRandomBot.Services
 
             SendActionService.SendAction(botClient, userId, ChatAction.Typing);
             Thread.Sleep(200);
+
+            DBService.SaveLogDb(null, callbackButtonModel);
 
             switch (callbackQueryData[0])
             {
@@ -73,7 +75,7 @@ namespace TgRusRandomBot.Services
             var text = $"{DefaultMessages.messageTextPasswordCQ}\n\n" +
                 $"Количество символов: {callbackQueryData[1]}\n" +
                 $"`{string.Join("", listPass)}`";
-            SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, ReplyKeyboardService.ReplyMainMenu());
+            SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
         }
 
         private static void TryYourLuck(UpdateCallbackButtonModel callbackButtonModel)
@@ -84,10 +86,10 @@ namespace TgRusRandomBot.Services
             var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
             var userId = callbackE.CallbackQuery.From.Id;
 
-            var text = $"";
-            var emoji = $"";
+            string text;
+            string emoji;
 
-            switch(callbackQueryData[1])
+            switch (callbackQueryData[1])
             {
                 case "bone":
                     text = "Так так:";
@@ -97,7 +99,7 @@ namespace TgRusRandomBot.Services
                     var value = Random.Next(0, 5);
                     text = "Так так:\n\n";
                     text += value <= 2 ? "Орел" : "Решка";
-                    SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, ReplyKeyboardService.ReplyMainMenu());
+                    SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
                     return;
                 case "slotMachine":
                     text = "Так так:";
@@ -123,7 +125,7 @@ namespace TgRusRandomBot.Services
                     return;
             }
 
-            SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, ReplyKeyboardService.ReplyMainMenu());
+            SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
             Thread.Sleep(200);
             SendActionService.SendDiceWithReplyKeyboard(botClient, userId, emoji);
         }
@@ -134,7 +136,6 @@ namespace TgRusRandomBot.Services
             var botClient = (ITelegramBotClient)callbackButtonModel.Sender;
 
             var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
-            var userId = callbackE.CallbackQuery.From.Id;
 
             var client = new RestClient($"https://{SecretKeys.urlRandSite}/question/answer/")
             {
@@ -161,7 +162,7 @@ namespace TgRusRandomBot.Services
 
                 SendActionService.EditMessageWithInlineKeyboard(
                     botClient, callbackE, text,
-                    ReplyKeyboardService.InlineQuestionAns(but1, but2, but3, but4));
+                    KeyboardService.InlineQuestionAns(but1, but2, but3, but4));
                 return;
             }
             if (ans.Answer.Correct == "2")
@@ -174,7 +175,7 @@ namespace TgRusRandomBot.Services
 
                 SendActionService.EditMessageWithInlineKeyboard(
                     botClient, callbackE, text,
-                    ReplyKeyboardService.InlineQuestionAns(but1, but2, but3, but4));
+                    KeyboardService.InlineQuestionAns(but1, but2, but3, but4));
                 return;
             }
             if (ans.Answer.Correct == "3")
@@ -187,7 +188,7 @@ namespace TgRusRandomBot.Services
 
                 SendActionService.EditMessageWithInlineKeyboard(
                     botClient, callbackE, text,
-                    ReplyKeyboardService.InlineQuestionAns(but1, but2, but3, but4));
+                    KeyboardService.InlineQuestionAns(but1, but2, but3, but4));
                 return;
             }
             if (ans.Answer.Correct == "4")
@@ -200,7 +201,7 @@ namespace TgRusRandomBot.Services
 
                 SendActionService.EditMessageWithInlineKeyboard(
                     botClient, callbackE, text,
-                    ReplyKeyboardService.InlineQuestionAns(but1, but2, but3, but4));
+                    KeyboardService.InlineQuestionAns(but1, but2, but3, but4));
                 return;
             }
         }
@@ -209,9 +210,6 @@ namespace TgRusRandomBot.Services
         {
             var callbackE = callbackButtonModel.EventArgs;
             var botClient = (ITelegramBotClient)callbackButtonModel.Sender;
-
-            var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
-            var userId = callbackE.CallbackQuery.From.Id;
 
             var text = $"{callbackE.CallbackQuery.Message.Text}";
             SendActionService.EditMessage(
@@ -222,9 +220,6 @@ namespace TgRusRandomBot.Services
         {
             var callbackE = callbackButtonModel.EventArgs;
             var botClient = (ITelegramBotClient)callbackButtonModel.Sender;
-
-            var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
-            var userId = callbackE.CallbackQuery.From.Id;
 
             var text = $"{callbackE.CallbackQuery.Message.Text}";
             SendActionService.EditMessage(

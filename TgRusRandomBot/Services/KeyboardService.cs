@@ -7,7 +7,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TgRusRandomBot.Services
 {
-    public class ReplyKeyboardService
+    public class KeyboardService
     {
         public static ReplyKeyboardMarkup ReplyMainMenu() => new()
         {

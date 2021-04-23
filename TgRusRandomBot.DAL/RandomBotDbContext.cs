@@ -16,5 +16,6 @@ namespace TgRusRandomBot.DAL
         }
 
         public DbSet<RandomBotUsers> RandomBotUsers { get; set; }
+        public DbSet<RandomBotLogs> RandomBotLogs { get; set; }
     }
 }

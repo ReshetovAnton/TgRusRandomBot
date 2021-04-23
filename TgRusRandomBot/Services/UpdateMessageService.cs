@@ -18,7 +18,7 @@ using TgRusRandomBot.TgBotModels;
 
 namespace TgRusRandomBot.Services
 {
-    public class UpdateMessage
+    public class UpdateMessageService
     {
         private static readonly Random Random = new();
 
@@ -35,15 +35,16 @@ namespace TgRusRandomBot.Services
             SendActionService.SendAction(botClient, userId, ChatAction.Typing);
             Thread.Sleep(200);
 
-            SaveUserDb(messageModel);
+            DBService.SaveUserDb(messageModel);
+            DBService.SaveLogDb(messageModel, null);
 
             switch (textNewMessage)
             {
                 case "/start":
-                    SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.startMessageText, ReplyKeyboardService.ReplyMainMenu());
+                    SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.startMessageText, KeyboardService.ReplyMainMenu());
                     return;
                 case "/help":
-                    SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.helpMessageText, ReplyKeyboardService.ReplyMainMenu());
+                    SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.helpMessageText, KeyboardService.ReplyMainMenu());
                     return;
             }
 
@@ -70,59 +71,17 @@ namespace TgRusRandomBot.Services
             }
         }
 
-        public static void SaveUserDb(UpdateMessageModel messageModel)
-        {
-            var messageE = messageModel.EventArgs;
-            var botClient = (ITelegramBotClient)messageModel.Sender;
-
-            //var textNewMessage = messageE.Message.Text;
-            var userId = messageE.Message.From.Id;
-            var userName = messageModel.EventArgs.Message.From.Username;
-            var firstName = messageModel.EventArgs.Message.From.FirstName;
-            var lastName = messageModel.EventArgs.Message.From.LastName;
-
-            var dateAdded = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time"));
-
-            var _contextRandomBot = SsData.GetRandomBotDbContex();
-
-            var user = _contextRandomBot.RandomBotUsers.SingleOrDefault(u => u.UserId == userId);
-            if(user == null)
-            {
-                var guid = Guid.NewGuid();
-                var saveUser = new RandomBotUsers
-                {
-                    Guid = guid,
-                    BotId = botClient.BotId,
-                    UserId = userId,
-                    UserName = userName,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    DateAdded = dateAdded
-                };
-                _contextRandomBot.RandomBotUsers.Add(saveUser);
-            }
-            else
-            {
-                user.BotId = botClient.BotId;
-                user.UserName = userName;
-                user.FirstName = firstName;
-                user.LastName = lastName;
-            }
-            _contextRandomBot.SaveChanges();
-        }
-
         public static void Numbers(UpdateMessageModel messageModel)
         {
             var messageE = messageModel.EventArgs;
             var botClient = (ITelegramBotClient)messageModel.Sender;
 
-            //var textNewMessage = messageE.Message.Text;
             var userId = messageE.Message.From.Id;
 
             var text = $"{DefaultMessages.messageTextNumber}\n\n" +
                 $"от 0 до 9999\n" +
                 $"{Random.Next(0, 9999)}";
-            SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, ReplyKeyboardService.ReplyMainMenu());
+            SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
         }
 
         public static void Password(UpdateMessageModel messageModel)
@@ -130,11 +89,10 @@ namespace TgRusRandomBot.Services
             var messageE = messageModel.EventArgs;
             var botClient = (ITelegramBotClient)messageModel.Sender;
 
-            //var textNewMessage = messageE.Message.Text;
             var userId = messageE.Message.From.Id;
 
             var text = $"{DefaultMessages.messageTextPassword}";
-            SendActionService.SendMessageWithInlineKeyboard(botClient, userId, text, ReplyKeyboardService.InlinePassword());
+            SendActionService.SendMessageWithInlineKeyboard(botClient, userId, text, KeyboardService.InlinePassword());
         }
 
         public static void TryYourLuck(UpdateMessageModel messageModel)
@@ -142,11 +100,10 @@ namespace TgRusRandomBot.Services
             var messageE = messageModel.EventArgs;
             var botClient = (ITelegramBotClient)messageModel.Sender;
 
-            //var textNewMessage = messageE.Message.Text;
             var userId = messageE.Message.From.Id;
 
             var text = $"{DefaultMessages.messageTextTryYourLuck}";
-            SendActionService.SendMessageWithInlineKeyboard(botClient, userId, text, ReplyKeyboardService.InlineTryYourLuck());
+            SendActionService.SendMessageWithInlineKeyboard(botClient, userId, text, KeyboardService.InlineTryYourLuck());
         }
 
         public static void Questions(UpdateMessageModel messageModel)
@@ -154,7 +111,6 @@ namespace TgRusRandomBot.Services
             var messageE = messageModel.EventArgs;
             var botClient = (ITelegramBotClient)messageModel.Sender;
 
-            //var textNewMessage = messageE.Message.Text;
             var userId = messageE.Message.From.Id;
 
             var client = new RestClient($"https://{SecretKeys.urlRandSite}/question/generate/")
@@ -172,7 +128,7 @@ namespace TgRusRandomBot.Services
                 $"{quest.Question.Text}";
             SendActionService.SendMessageWithInlineKeyboard(
                 botClient, userId, text, 
-                ReplyKeyboardService.InlineQuestion(quest.Question.Answer1, quest.Question.Answer2, quest.Question.Answer3, quest.Question.Answer4, quest.Question.Id));
+                KeyboardService.InlineQuestion(quest.Question.Answer1, quest.Question.Answer2, quest.Question.Answer3, quest.Question.Answer4, quest.Question.Id));
         }
 
         public static void Facts(UpdateMessageModel messageModel)
@@ -180,7 +136,6 @@ namespace TgRusRandomBot.Services
             var messageE = messageModel.EventArgs;
             var botClient = (ITelegramBotClient)messageModel.Sender;
 
-            //var textNewMessage = messageE.Message.Text;
             var userId = messageE.Message.From.Id;
 
             var client = new RestClient($"https://{SecretKeys.urlRandSite}/fact/generate/")
@@ -198,7 +153,7 @@ namespace TgRusRandomBot.Services
                 $"{fact.Fact.Text}";
             SendActionService.SendMessageWithInlineKeyboard(
                 botClient, userId, text,
-                ReplyKeyboardService.InlineFact());
+                KeyboardService.InlineFact());
         }
 
         public static void Saying(UpdateMessageModel messageModel)
@@ -206,7 +161,6 @@ namespace TgRusRandomBot.Services
             var messageE = messageModel.EventArgs;
             var botClient = (ITelegramBotClient)messageModel.Sender;
 
-            //var textNewMessage = messageE.Message.Text;
             var userId = messageE.Message.From.Id;
 
             var client = new RestClient($"https://{SecretKeys.urlRandSite}/saying/generate/")
@@ -225,7 +179,7 @@ namespace TgRusRandomBot.Services
                 $"© {saying.Saying.Author}";
             SendActionService.SendMessageWithInlineKeyboard(
                 botClient, userId, text,
-                ReplyKeyboardService.InlineSaying());
+                KeyboardService.InlineSaying());
         }
     }
 }
