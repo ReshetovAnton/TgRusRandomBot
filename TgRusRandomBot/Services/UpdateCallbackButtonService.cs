@@ -63,18 +63,19 @@ namespace TgRusRandomBot.Services
             var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
             var userId = callbackE.CallbackQuery.From.Id;
 
-            var guid = Guid
-                .NewGuid()
-                .ToString()
-                .Replace("-", string.Empty)
-                .ToList();
-            var listPass = guid
-                .Take(Convert.ToInt32(callbackQueryData[1]))
-                .ToList();
+            var countSumbols = Convert.ToInt16(callbackQueryData[1]);
+
+            var password = "";
+            while(password.Length < countSumbols)
+            {
+                var symbol = (char)Random.Next(48, 122);
+                if (char.IsLetterOrDigit(symbol))
+                    password += symbol;
+            }
 
             var text = $"{DefaultMessages.messageTextPasswordCQ}\n\n" +
-                $"Количество символов: {callbackQueryData[1]}\n" +
-                $"`{string.Join("", listPass)}`";
+                $"Количество символов: {countSumbols}\n" +
+                $"`{password}`";
             SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
         }
 
