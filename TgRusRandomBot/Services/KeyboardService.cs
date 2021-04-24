@@ -32,6 +32,15 @@ namespace TgRusRandomBot.Services
             ResizeKeyboard = true
         };
 
+        public static InlineKeyboardMarkup InlineAdministrator() => new(
+            new InlineKeyboardButton[][]
+            {
+                new[]
+                {
+                    new InlineKeyboardButton{ CallbackData = $"AdminCountUsers", Text = "Количество пользователей📈"}
+                }
+            });
+
         public static InlineKeyboardMarkup InlinePassword() => new(
             new InlineKeyboardButton[][]
             {
@@ -56,7 +65,7 @@ namespace TgRusRandomBot.Services
                     new InlineKeyboardButton{ CallbackData = $"Pass|||15", Text = "15"},
                     new InlineKeyboardButton{ CallbackData = $"Pass|||16", Text = "16"},
                 },
-            } );
+            });
 
         public static InlineKeyboardMarkup InlineTryYourLuck() => new(
             new InlineKeyboardButton[][]
@@ -102,13 +111,13 @@ namespace TgRusRandomBot.Services
             {
                 new[]
                 {
-                    new InlineKeyboardButton{ CallbackData = $"null", Text = answer1 },
-                    new InlineKeyboardButton{ CallbackData = $"null", Text = answer2 }
+                    new InlineKeyboardButton{ CallbackData = $"{answer1}", Text = answer1 },
+                    new InlineKeyboardButton{ CallbackData = $"{answer2}", Text = answer2 }
                 },
                 new[]
                 {
-                    new InlineKeyboardButton{ CallbackData = $"null", Text = answer3 },
-                    new InlineKeyboardButton{ CallbackData = $"null", Text = answer4 }
+                    new InlineKeyboardButton{ CallbackData = $"{answer3}", Text = answer3 },
+                    new InlineKeyboardButton{ CallbackData = $"{answer4}", Text = answer4 }
                 }
             });
 

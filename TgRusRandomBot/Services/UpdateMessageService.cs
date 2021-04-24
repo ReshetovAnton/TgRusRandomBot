@@ -46,6 +46,9 @@ namespace TgRusRandomBot.Services
                 case "/help":
                     SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.helpMessageText, KeyboardService.ReplyMainMenu());
                     return;
+                case "/admin":
+                    Administrator(messageModel);
+                    return;
             }
 
             switch(textNewMessage)
@@ -67,6 +70,13 @@ namespace TgRusRandomBot.Services
                     return;
                 case "Испытать удачу🎲":
                     TryYourLuck(messageModel);
+                    return;
+            }
+
+            switch (textNewMessage)
+            {
+                case "/admin":
+                    Administrator(messageModel);
                     return;
             }
         }
@@ -180,6 +190,19 @@ namespace TgRusRandomBot.Services
             SendActionService.SendMessageWithInlineKeyboard(
                 botClient, userId, text,
                 KeyboardService.InlineSaying());
+        }
+
+        public static void Administrator(UpdateMessageModel messageModel)
+        {
+            var messageE = messageModel.EventArgs;
+            var botClient = (ITelegramBotClient)messageModel.Sender;
+
+            var userId = messageE.Message.From.Id;
+
+            if (userId == SecretKeys.AdminTgUserId)
+                SendActionService.SendMessageWithInlineKeyboard(botClient, userId, DefaultMessages.messageAccessAdmin, KeyboardService.InlineAdministrator());
+            else
+                SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.messageNoAccessAdmin, KeyboardService.ReplyMainMenu());
         }
     }
 }

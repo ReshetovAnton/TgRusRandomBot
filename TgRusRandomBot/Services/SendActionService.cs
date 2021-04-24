@@ -68,7 +68,7 @@ namespace TgRusRandomBot.Services
             catch { }
         }
 
-        public static async void SendDiceWithReplyKeyboard(ITelegramBotClient botClient, long userId, string emoji)
+        public static async void SendDice(ITelegramBotClient botClient, long userId, string emoji)
         {
             try
             {

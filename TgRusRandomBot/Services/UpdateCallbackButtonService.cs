@@ -12,6 +12,8 @@ using RestSharp;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using TgRusRandomBot.TgBotModels;
+using TgRusRandomBot.Cache;
+using TgRusRandomBot.TgBotModels.Statistics;
 
 namespace TgRusRandomBot.Services
 {
@@ -29,17 +31,18 @@ namespace TgRusRandomBot.Services
             var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
             var userId = callbackE.CallbackQuery.From.Id;
 
-            SendActionService.SendAction(botClient, userId, ChatAction.Typing);
-            Thread.Sleep(200);
-
             DBService.SaveLogDb(null, callbackButtonModel);
 
             switch (callbackQueryData[0])
             {
                 case "Pass":
+                    SendActionService.SendAction(botClient, userId, ChatAction.Typing);
+                    Thread.Sleep(200);
                     Password(callbackButtonModel);
                     break;
                 case "TryYourLuck":
+                    SendActionService.SendAction(botClient, userId, ChatAction.Typing);
+                    Thread.Sleep(200);
                     TryYourLuck(callbackButtonModel);
                     break;
                 case "Question":
@@ -50,6 +53,15 @@ namespace TgRusRandomBot.Services
                     break;
                 case "Saying":
                     Saying(callbackButtonModel);
+                    break;
+            }
+
+            switch (callbackQueryData[0])
+            {
+                case "AdminCountUsers":
+                    SendActionService.SendAction(botClient, userId, ChatAction.Typing);
+                    Thread.Sleep(200);
+                    AdminCountUsers(callbackButtonModel);
                     break;
             }
             SendActionService.Spiner(botClient, callbackE);
@@ -74,7 +86,7 @@ namespace TgRusRandomBot.Services
             }
 
             var text = $"{DefaultMessages.messageTextPasswordCQ}\n\n" +
-                $"Количество символов: {countSumbols}\n" +
+                $"{DefaultMessages.messageTextPasswordCS} {countSumbols}\n" +
                 $"`{password}`";
             SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
         }
@@ -128,7 +140,7 @@ namespace TgRusRandomBot.Services
 
             SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
             Thread.Sleep(200);
-            SendActionService.SendDiceWithReplyKeyboard(botClient, userId, emoji);
+            SendActionService.SendDice(botClient, userId, emoji);
         }
 
         private static void Question(UpdateCallbackButtonModel callbackButtonModel)
@@ -225,6 +237,25 @@ namespace TgRusRandomBot.Services
             var text = $"{callbackE.CallbackQuery.Message.Text}";
             SendActionService.EditMessage(
                     botClient, callbackE, text);
+        }
+
+        private static void AdminCountUsers(UpdateCallbackButtonModel callbackButtonModel)
+        {
+            var callbackE = callbackButtonModel.EventArgs;
+            var botClient = (ITelegramBotClient)callbackButtonModel.Sender;
+            var userId = callbackE.CallbackQuery.From.Id;
+
+            if (userId == SecretKeys.AdminTgUserId)
+            {
+                var countUsers = new CountUsers() { Count = 0 };
+                if (CacheService.TryGetValue(CacheKeys.CountUsers, out long count))
+                    countUsers.Count = count;
+
+                var text = $"{DefaultMessages.messageCountUsers} {countUsers.Count}";
+                SendActionService.SendMessageWithReplyKeyboard(botClient, userId, text, KeyboardService.ReplyMainMenu());
+            }
+            else
+                SendActionService.SendMessageWithReplyKeyboard(botClient, userId, DefaultMessages.messageNoAccessAdmin, KeyboardService.ReplyMainMenu());
         }
     }
 }

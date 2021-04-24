@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using TgRusRandomBot.Cache;
 using TgRusRandomBot.Models.TgBotModels;
 
 namespace TgRusRandomBot
@@ -26,6 +27,8 @@ namespace TgRusRandomBot
         [SuppressMessage("Usage", "CA2211:Поля, не являющиеся константами, не должны быть видимыми", Justification = "<Ожидание>")]
         #endregion
         public static List<string> BotTokens = new();
+
+        private static Timer Timer;
 
         private static void Main()
         {
@@ -71,6 +74,9 @@ namespace TgRusRandomBot
             BotClient4.OnCallbackQuery += UpdateCallbackButton;
             BotClient4.StartReceiving();
 
+            var updatePeriod = 1000 * 60 * 10; // 10 минут
+            Timer = new Timer(new TimerCallback(Update), null, 0, updatePeriod);
+
             Console.ReadKey();
         }
 
@@ -94,6 +100,11 @@ namespace TgRusRandomBot
             };
             var updateMessage = new Thread(new ParameterizedThreadStart(Services.UpdateCallbackButtonService.UpdateCallbackButtonMethod));
             updateMessage.Start(callbackButtonModel);
+        }
+
+        public static void Update(object state)
+        {
+            RefreshService.SetCountUsers();
         }
     }
 }

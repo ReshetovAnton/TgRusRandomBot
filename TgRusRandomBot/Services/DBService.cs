@@ -99,5 +99,14 @@ namespace TgRusRandomBot.Services
             else
                 return;
         }
+
+        public static long GetCountUsers()
+        {
+            var _contextRandomBot = SsData.GetRandomBotDbContex();
+
+            var countUsers = _contextRandomBot.RandomBotUsers.LongCount();
+
+            return countUsers;
+        }
     }
 }
