@@ -119,6 +119,11 @@ namespace TgRusRandomBot.Services
             var randId = Random.Next(1, countPats);
 
             var pats = _contextRandomBot.RandomBotPatsanskiye.SingleOrDefault(u => u.Id == randId);
+            if(pats != null)
+            {
+                pats.Show += 1;
+                _contextRandomBot.SaveChanges();
+            }
             return pats;
         }
 

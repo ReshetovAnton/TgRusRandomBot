@@ -14,5 +14,6 @@ namespace TgRusRandomBot.DAL.Entities
         public string Quote { get; set; }
         public int Like { get; set; }
         public int Dislike { get; set; }
+        public int Show { get; set; }
     }
 }
