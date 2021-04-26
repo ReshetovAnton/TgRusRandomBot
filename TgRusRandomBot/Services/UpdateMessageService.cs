@@ -68,6 +68,9 @@ namespace TgRusRandomBot.Services
                 case "Мудрости🧐":
                     Saying(messageModel);
                     return;
+                case "Пацанские цитаты👆🏻":
+                    Patsanskiye(messageModel);
+                    return;
                 case "Испытать удачу🎲":
                     TryYourLuck(messageModel);
                     return;
@@ -190,6 +193,31 @@ namespace TgRusRandomBot.Services
             SendActionService.SendMessageWithInlineKeyboard(
                 botClient, userId, text,
                 KeyboardService.InlineSaying());
+        }
+
+        public static void Patsanskiye(UpdateMessageModel messageModel)
+        {
+            var messageE = messageModel.EventArgs;
+            var botClient = (ITelegramBotClient)messageModel.Sender;
+
+            var userId = messageE.Message.From.Id;
+
+            var pats = DBService.GetPatsanskiye();
+            if(pats != null)
+            {
+                var text = $"{DefaultMessages.messageTextPatsanskiye}\n\n" +
+                    $"{pats.Quote}👆🏻";
+                SendActionService.SendMessageWithInlineKeyboard(
+                    botClient, userId, text,
+                    KeyboardService.InlineQPatsanskiye(pats.Id));
+            }
+
+            //var text = $"{DefaultMessages.messageTextSaying}\n\n" +
+            //    $"{saying.Saying.Text}\n\n" +
+            //    $"© {saying.Saying.Author}";
+            //SendActionService.SendMessageWithInlineKeyboard(
+            //    botClient, userId, text,
+            //    KeyboardService.InlineSaying());
         }
 
         public static void Administrator(UpdateMessageModel messageModel)

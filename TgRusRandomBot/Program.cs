@@ -28,51 +28,54 @@ namespace TgRusRandomBot
         #endregion
         public static List<string> BotTokens = new();
 
+        #region CodeQuality
+        [SuppressMessage("CodeQuality", "IDE0052:Удалить непрочитанные закрытые члены", Justification = "<Ожидание>")]
+        #endregion
         private static Timer Timer;
 
         private static void Main()
         {
-            //var botTokenTest = SecretKeys.botTokenTest;//test
-            //BotTokens.Add(botTokenTest);
-            //BotClientTest = new TelegramBotClient(botTokenTest) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
-            //BotClientTest.OnMessage += UpdateMessage;
-            //BotClientTest.OnCallbackQuery += UpdateCallbackButton;
-            //BotClientTest.StartReceiving();
+            var botTokenTest = SecretKeys.botTokenTest;//test
+            BotTokens.Add(botTokenTest);
+            BotClientTest = new TelegramBotClient(botTokenTest) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
+            BotClientTest.OnMessage += UpdateMessage;
+            BotClientTest.OnCallbackQuery += UpdateCallbackButton;
+            BotClientTest.StartReceiving();
 
-            var botToken0 = SecretKeys.botToken0;
-            BotTokens.Add(botToken0);
-            BotClient0 = new TelegramBotClient(botToken0) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
-            BotClient0.OnMessage += UpdateMessage;
-            BotClient0.OnCallbackQuery += UpdateCallbackButton;
-            BotClient0.StartReceiving();
+            //var botToken0 = SecretKeys.botToken0;
+            //BotTokens.Add(botToken0);
+            //BotClient0 = new TelegramBotClient(botToken0) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
+            //BotClient0.OnMessage += UpdateMessage;
+            //BotClient0.OnCallbackQuery += UpdateCallbackButton;
+            //BotClient0.StartReceiving();
 
-            var botToken1 = SecretKeys.botToken1;
-            BotTokens.Add(botToken1);
-            BotClient1 = new TelegramBotClient(botToken1) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
-            BotClient1.OnMessage += UpdateMessage;
-            BotClient1.OnCallbackQuery += UpdateCallbackButton;
-            BotClient1.StartReceiving();
+            //var botToken1 = SecretKeys.botToken1;
+            //BotTokens.Add(botToken1);
+            //BotClient1 = new TelegramBotClient(botToken1) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
+            //BotClient1.OnMessage += UpdateMessage;
+            //BotClient1.OnCallbackQuery += UpdateCallbackButton;
+            //BotClient1.StartReceiving();
 
-            var botToken2 = SecretKeys.botToken2;
-            BotTokens.Add(botToken2);
-            BotClient2 = new TelegramBotClient(botToken2) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
-            BotClient2.OnMessage += UpdateMessage;
-            BotClient2.OnCallbackQuery += UpdateCallbackButton;
-            BotClient2.StartReceiving();
+            //var botToken2 = SecretKeys.botToken2;
+            //BotTokens.Add(botToken2);
+            //BotClient2 = new TelegramBotClient(botToken2) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
+            //BotClient2.OnMessage += UpdateMessage;
+            //BotClient2.OnCallbackQuery += UpdateCallbackButton;
+            //BotClient2.StartReceiving();
 
-            var botToken3 = SecretKeys.botToken3;
-            BotTokens.Add(botToken3);
-            BotClient3 = new TelegramBotClient(botToken3) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
-            BotClient3.OnMessage += UpdateMessage;
-            BotClient3.OnCallbackQuery += UpdateCallbackButton;
-            BotClient3.StartReceiving();
+            //var botToken3 = SecretKeys.botToken3;
+            //BotTokens.Add(botToken3);
+            //BotClient3 = new TelegramBotClient(botToken3) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
+            //BotClient3.OnMessage += UpdateMessage;
+            //BotClient3.OnCallbackQuery += UpdateCallbackButton;
+            //BotClient3.StartReceiving();
 
-            var botToken4 = SecretKeys.botToken4;
-            BotTokens.Add(botToken4);
-            BotClient4 = new TelegramBotClient(botToken4) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
-            BotClient4.OnMessage += UpdateMessage;
-            BotClient4.OnCallbackQuery += UpdateCallbackButton;
-            BotClient4.StartReceiving();
+            //var botToken4 = SecretKeys.botToken4;
+            //BotTokens.Add(botToken4);
+            //BotClient4 = new TelegramBotClient(botToken4) { Timeout = TimeSpan.FromSeconds(DefaultValues.botTimeOut) };
+            //BotClient4.OnMessage += UpdateMessage;
+            //BotClient4.OnCallbackQuery += UpdateCallbackButton;
+            //BotClient4.StartReceiving();
 
             var updatePeriod = 1000 * 60 * 10; // 10 минут
             Timer = new Timer(new TimerCallback(Update), null, 0, updatePeriod);

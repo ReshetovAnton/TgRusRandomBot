@@ -26,6 +26,10 @@ namespace TgRusRandomBot.Services
                 },
                 new[]
                 {
+                    new KeyboardButton("Пацанские цитаты👆🏻"),
+                },
+                new[]
+                {
                     new KeyboardButton("Испытать удачу🎲"),
                 },
             },
@@ -138,6 +142,16 @@ namespace TgRusRandomBot.Services
                 {
                     new InlineKeyboardButton{ CallbackData = $"Saying|||dislike", Text = "Глупо👎🏻" },
                     new InlineKeyboardButton{ CallbackData = $"Saying|||like", Text = "Мудро👍🏻" }
+                }
+            });
+
+        public static InlineKeyboardMarkup InlineQPatsanskiye(int id) => new(
+            new InlineKeyboardButton[][]
+            {
+                new[]
+                {
+                    new InlineKeyboardButton{ CallbackData = $"Patsanskiye|||{id}|||dislike", Text = "Не пацанская👎🏻" },
+                    new InlineKeyboardButton{ CallbackData = $"Patsanskiye|||{id}|||like", Text = "Пацанская👍🏻" }
                 }
             });
     }

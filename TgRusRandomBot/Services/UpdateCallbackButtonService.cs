@@ -54,6 +54,9 @@ namespace TgRusRandomBot.Services
                 case "Saying":
                     Saying(callbackButtonModel);
                     break;
+                case "Patsanskiye":
+                    Patsanskiye(callbackButtonModel);
+                    break;
             }
 
             switch (callbackQueryData[0])
@@ -233,6 +236,19 @@ namespace TgRusRandomBot.Services
         {
             var callbackE = callbackButtonModel.EventArgs;
             var botClient = (ITelegramBotClient)callbackButtonModel.Sender;
+
+            var text = $"{callbackE.CallbackQuery.Message.Text}";
+            SendActionService.EditMessage(
+                    botClient, callbackE, text);
+        }
+
+        private static void Patsanskiye(UpdateCallbackButtonModel callbackButtonModel)
+        {
+            var callbackE = callbackButtonModel.EventArgs;
+            var botClient = (ITelegramBotClient)callbackButtonModel.Sender;
+
+            var callbackQueryData = callbackE.CallbackQuery.Data.Split("|||");
+            DBService.SetPatsanskiyeAppraisal(Convert.ToInt32(callbackQueryData[1]), callbackQueryData[2] == "like" ? 1 : 0);
 
             var text = $"{callbackE.CallbackQuery.Message.Text}";
             SendActionService.EditMessage(

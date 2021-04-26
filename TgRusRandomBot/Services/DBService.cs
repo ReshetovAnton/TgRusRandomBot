@@ -13,6 +13,8 @@ namespace TgRusRandomBot.Services
 {
     public class DBService
     {
+        private static readonly Random Random = new();
+
         public static void SaveUserDb(UpdateMessageModel messageModel)
         {
             var messageE = messageModel.EventArgs;
@@ -107,6 +109,30 @@ namespace TgRusRandomBot.Services
             var countUsers = _contextRandomBot.RandomBotUsers.LongCount();
 
             return countUsers;
+        }
+
+        public static RandomBotPatsanskiye GetPatsanskiye()
+        {
+            var _contextRandomBot = SsData.GetRandomBotDbContex();
+
+            var countPats = _contextRandomBot.RandomBotPatsanskiye.Count();
+            var randId = Random.Next(1, countPats);
+
+            var pats = _contextRandomBot.RandomBotPatsanskiye.SingleOrDefault(u => u.Id == randId);
+            return pats;
+        }
+
+        public static void SetPatsanskiyeAppraisal(int id, int appraisal)
+        {
+            var _contextRandomBot = SsData.GetRandomBotDbContex();
+
+            var pats = _contextRandomBot.RandomBotPatsanskiye.SingleOrDefault(u => u.Id == id);
+            if(pats != null)
+            {
+                pats.Like = appraisal == 1 ? pats.Like += 1 : pats.Like;
+                pats.Dislike = appraisal == 0 ? pats.Dislike += 1 : pats.Dislike;
+                _contextRandomBot.SaveChanges();
+            }
         }
     }
 }
