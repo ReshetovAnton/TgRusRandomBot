@@ -33,7 +33,7 @@ namespace TgRusRandomBot.Services
             var userId = messageE.Message.From.Id;
 
             SendActionService.SendAction(botClient, userId, ChatAction.Typing);
-            Thread.Sleep(200);
+            Thread.Sleep(20);
 
             DBService.SaveUserDb(messageModel);
             DBService.SaveLogDb(messageModel, null);
@@ -211,13 +211,6 @@ namespace TgRusRandomBot.Services
                     botClient, userId, text,
                     KeyboardService.InlineQPatsanskiye(pats.Id));
             }
-
-            //var text = $"{DefaultMessages.messageTextSaying}\n\n" +
-            //    $"{saying.Saying.Text}\n\n" +
-            //    $"© {saying.Saying.Author}";
-            //SendActionService.SendMessageWithInlineKeyboard(
-            //    botClient, userId, text,
-            //    KeyboardService.InlineSaying());
         }
 
         public static void Administrator(UpdateMessageModel messageModel)

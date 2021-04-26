@@ -37,12 +37,12 @@ namespace TgRusRandomBot.Services
             {
                 case "Pass":
                     SendActionService.SendAction(botClient, userId, ChatAction.Typing);
-                    Thread.Sleep(200);
+                    Thread.Sleep(20);
                     Password(callbackButtonModel);
                     break;
                 case "TryYourLuck":
                     SendActionService.SendAction(botClient, userId, ChatAction.Typing);
-                    Thread.Sleep(200);
+                    Thread.Sleep(20);
                     TryYourLuck(callbackButtonModel);
                     break;
                 case "Question":
@@ -63,7 +63,7 @@ namespace TgRusRandomBot.Services
             {
                 case "AdminCountUsers":
                     SendActionService.SendAction(botClient, userId, ChatAction.Typing);
-                    Thread.Sleep(200);
+                    Thread.Sleep(20);
                     AdminCountUsers(callbackButtonModel);
                     break;
             }
